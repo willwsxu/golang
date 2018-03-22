@@ -95,7 +95,8 @@ func minimumTotal(triangle [][]int) int {
 	var memo = create2Darray(len(triangle), len(triangle), math.MaxInt32)
 	return minimumTotal_dp(triangle, 0, 0, memo)
 }
-func main() {
+
+func testTriangle() {
 	var triangle = make([][]int, 2)
 	triangle[0] = make([]int, 1)
 	triangle[1] = make([]int, 2)
@@ -103,4 +104,43 @@ func main() {
 	triangle[1][0] = 2
 	triangle[1][1] = 3
 	fmt.Println(minimumTotal(triangle))
+}
+
+// 416. Partition Equal Subset Sum
+func canPartition(nums []int) bool {
+	var sum = 0
+	for _, n := range nums {
+		sum += n
+	}
+	if sum&1 == 1 {
+		return false
+	} //odd
+	sum /= 2
+	var dp = make([]bool, sum+1)
+	dp[0] = true
+	//fmt.Printf("%v\n", dp)
+	for _, n := range nums {
+		if sum >= n {
+			dp[sum] = dp[sum] || dp[sum-n]
+			if dp[sum] {
+				return true
+			}
+		}
+		for j := sum - 1; j > 0; j-- {
+			if j >= n {
+				dp[j] = dp[j] || dp[j-n]
+			}
+		}
+	}
+	return dp[sum]
+}
+func main() {
+	var nums = [...]int{1, 5, 11, 5}          //array
+	fmt.Printf("%t\n", canPartition(nums[:])) // convert to slice
+
+	var nums2 = [...]int{1, 2, 3, 5}
+	fmt.Printf("%t\n", canPartition(nums2[:]) == false)
+
+	var nums3 = [...]int{3, 3, 3, 4, 5}
+	fmt.Printf("%t\n", canPartition(nums3[:]))
 }
