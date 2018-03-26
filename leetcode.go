@@ -70,15 +70,19 @@ func combinationSum4(nums []int, target int) int {
 	return combinationSum4Dp(nums, target)
 }
 
-func min(a int, b int) int { // math.Min is float type
-	if a < b {
+func Ternary(statement bool, a, b interface{}) interface{} {
+	if statement {
 		return a
 	}
 	return b
 }
 
+func min(a int, b int) int { // math.Min is float type
+	return Ternary(a < b, a, b).(int)
+}
+
 //const MaxInt32 = 1999999999
-// 120. Triangle
+// 120. Triangleternary
 func minimumTotal_dp(triangle [][]int, level int, pos int, memo [][]int) int {
 	if level == len(triangle)-1 {
 		return triangle[level][pos]
@@ -210,5 +214,61 @@ func numTilings(N int) int {
 	}
 	return dp[N]
 }
+
+func tern_op(cond bool, first, second int) int {
+	if cond {
+		return first
+	}
+	return second
+}
+func findPaths(m int, n int, N int, i int, j int) int {
+	var dp3 = make([][][]int, 2)
+	const SIZE int = 50
+	for i := 0; i < 2; i++ {
+		dp3[i] = make([][]int, SIZE)
+		for j := 0; j < SIZE; j++ {
+			dp3[i][j] = make([]int, SIZE)
+			//fmt.Println("i %v j=%v, array=%v", i, j, dp3[i][j])
+		}
+	}
+	const MOD int = 1000000007
+	var prev int = 0
+	var current int = 0
+	for x := 1; x <= N; x++ {
+		current = 1 - prev
+		//fmt.Println("loop %v current=%v", x, current)
+		for r := 0; r < m; r++ {
+			for c := 0; c < n; c++ {
+				//fmt.Println("loop %v current=%v r=%v c=%v", x, current, r, c)
+				if r == 0 { // up
+					dp3[current][r][c] = 1
+				} else {
+					dp3[current][r][c] = dp3[prev][r-1][c]
+				}
+				if r == m-1 {
+					dp3[current][r][c] += 1
+				} else {
+					dp3[current][r][c] += dp3[prev][r+1][c] // down
+					dp3[current][r][c] %= MOD
+				}
+				if c == 0 {
+					dp3[current][r][c] += 1
+				} else {
+					dp3[current][r][c] += dp3[prev][r][c-1] // left
+					dp3[current][r][c] %= MOD
+				}
+				if c == n-1 {
+					dp3[current][r][c] += 1
+				} else {
+					dp3[current][r][c] += dp3[prev][r][c+1] // left
+					dp3[current][r][c] %= MOD
+				}
+			}
+		}
+		prev = current // swap
+	}
+	return dp3[current][i][j]
+}
 func main() {
+	fmt.Println("%v\n", findPaths(2, 2, 2, 0, 0))
 }
