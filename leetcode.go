@@ -134,7 +134,8 @@ func canPartition(nums []int) bool {
 	}
 	return dp[sum]
 }
-func main() {
+
+func testEqualSumPartition() {
 	var nums = [...]int{1, 5, 11, 5}          //array
 	fmt.Printf("%t\n", canPartition(nums[:])) // convert to slice
 
@@ -143,4 +144,7 @@ func main() {
 
 	var nums3 = [...]int{3, 3, 3, 4, 5}
 	fmt.Printf("%t\n", canPartition(nums3[:]))
+}
+
+func main() {
 }
