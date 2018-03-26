@@ -182,7 +182,33 @@ func canPartitionKSubsets(nums []int, k int) bool {
 	var chosen = make([]bool, len(nums))
 	return dfsKPartition(nums, k, chosen, 0, sum/k, 0, 0)
 }
-func main() {
+func testKPartition() {
 	var nums3 = [...]int{3, 3, 3, 4, 5}
 	fmt.Printf("%t\n", canPartitionKSubsets(nums3[:], 2))
+}
+
+// a 2x1 domino shape, and an "L" tromino shape
+// Given N, how many ways are there to tile a 2 x N board? Return your answer modulo 10^9 + 7
+func numTilings(N int) int {
+	const MOD int = 1000000007
+	if N < 3 {
+		return N
+	}
+	var dp = make([]int, N+1) // flat end
+	dp[0] = 0
+	dp[1] = 1 // n=1, one way
+	dp[2] = 2
+	var dp2 = make([]int, N+1) // tromino end
+	dp2[0] = 0
+	dp2[1] = 0
+	dp2[2] = 2
+	for n := 3; n <= N; n++ {
+		dp[n] = (dp[n-1] + dp[n-2]) % MOD  // domino to domino
+		dp[n] = (dp[n] + dp2[n-1]) % MOD   // tromino+tromino
+		dp2[n] = (2 * dp[n-2]) % MOD       // domino + tromino
+		dp2[n] = (dp2[n] + dp2[n-1]) % MOD // tromino + domino extend tromino
+	}
+	return dp[N]
+}
+func main() {
 }
