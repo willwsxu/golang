@@ -146,5 +146,43 @@ func testEqualSumPartition() {
 	fmt.Printf("%t\n", canPartition(nums3[:]))
 }
 
+func dfsKPartition(nums []int, k int, chosen []bool, subsetSum int, target int, setIdx int, numIdx int) bool {
+	if k == 1 && target != 0 || k == 0 {
+		return true
+	}
+	if subsetSum == target && setIdx > 0 { // setIdx>0 is used to support target=0
+		return dfsKPartition(nums, k-1, chosen, 0, target, 0, 0)
+	}
+	for i := numIdx; i < len(nums); i++ {
+		if chosen[i] || subsetSum+nums[i] > target {
+			continue
+		}
+		chosen[i] = true
+		if dfsKPartition(nums, k, chosen, subsetSum+nums[i], target, setIdx+1, i+1) {
+			return true
+		}
+		chosen[i] = false
+	}
+	return false
+}
+func canPartitionKSubsets(nums []int, k int) bool {
+	if k < 1 {
+		return false
+	}
+	if k == 1 {
+		return true
+	}
+	var sum = 0
+	for _, n := range nums {
+		sum += n
+	}
+	if sum%k > 0 {
+		return false
+	} //not divisible
+	var chosen = make([]bool, len(nums))
+	return dfsKPartition(nums, k, chosen, 0, sum/k, 0, 0)
+}
 func main() {
+	var nums3 = [...]int{3, 3, 3, 4, 5}
+	fmt.Printf("%t\n", canPartitionKSubsets(nums3[:], 2))
 }
