@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 import "math"
+// https://github.com/Microsoft/vscode-go/wiki/Debugging-Go-code-using-VS-Code
 
 // 474. Ones and Zeroes
 func max(a int, b int) int {
