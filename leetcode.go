@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 import "math"
+
+// https://code.visualstudio.com/docs/languages/go
 // https://github.com/Microsoft/vscode-go/wiki/Debugging-Go-code-using-VS-Code
 
 // 474. Ones and Zeroes
